@@ -1,5 +1,5 @@
 #!/bin/bash
-# weather 1.2
+# weather.sh 1.2
 # Ashish D'Souza
 # December 25th, 2018
 
