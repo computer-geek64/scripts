@@ -12,16 +12,17 @@ Install a Linux or Unix operating system (preferrably [Kali Linux](https://www.k
 sudo -i
 apt-get update --fix-missing -y
 apt-get dist-upgrade -y
+apt-get install gnome-screensaver wmctrl -y
 apt-get autoremove -y
-apt-get autoclean -y
+apt-get clean -y
 ```
 2. Install Python 3.6 (if not already installed)
 ```bash
 apt-get install python3 -y
 ```
-3. Install Python packages
+3. Install Python packages (optional, Python scripts already have an automatic dependency installation feature)
 ```bash
-pip install gTTS; pip3 install gTTS
+pip install PACKAGE; pip3 install PACKAGE
 ```
 
 ## Installation
@@ -63,4 +64,4 @@ See also the list of [contributors](/docs/CONTRIBUTORS.md) who participated in t
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## Acknowledgment
-* Quick thanks to open-source
+* This project would not have been possible without open-source
