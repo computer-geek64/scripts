@@ -38,7 +38,7 @@ def print_usage():
 
 layers = list(map(int, sys.argv[1:-1]))
 
-if len(sys.argv) < 4:
+if len(sys.argv) < 2:
 	print_banner()
 	print_usage()
 	exit(0)
