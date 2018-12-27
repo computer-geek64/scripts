@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-# pomodoro.py v2.2
+# pomodoro.py v2.3
 # Ashish D'Souza
-# December 26th, 2018
+# December 27th, 2018
 
 try:
 	import os
@@ -45,42 +45,54 @@ def print_usage():
 	print("-s\t\t--short-break\t\tSpecify short break length (minutes)")
 	print("-l\t\t--long-break\t\tSpecify long break length (minutes)")
 	print("-t\t\t--task\t\t\tSpecify task to complete (default is \"pomodoro\")")
+	print("-u\t\t--update\t\tSpecify update interval (seconds, default is 1)")
 
 class Timer:
-	def __init__(self, limit):
+	def __init__(self, limit, task_name):
 		self.elapsed_time = 0
 		self.start_time = 0
 		self.time_limit = limit
+		self.task = task_name
 		self.paused = False
+		self.output_base = self.task + " " * 10
 
-	def start(self):
+	def start(self, update_interval):
 		keyboard.add_hotkey("ctrl+alt+space", self.pause)
 		self.start_time = time.time()
+		print()
 		while self.elapsed_time < self.time_limit:
-			time.sleep(5)
 			if not self.paused:
 				self.elapsed_time = time.time() - self.start_time
+				minutes = str(int(self.elapsed_time / 60))
+				minutes = "0" * (2 - len(minutes)) + minutes
+				seconds = str(int(self.elapsed_time % 60))
+				seconds = "0" * (2 - len(seconds)) + seconds
+				percentage = int(100 * self.elapsed_time / self.time_limit)
+				print("\033[A" + self.output_base + " " * (3 - len(str(percentage))) + str(percentage) + "% [" + "=" * percentage + ">" + " " * (100 - percentage) + "] " + minutes + ":" + seconds)
+			time.sleep(1)
 		self.stop()
 
 	def pause(self):
 		if self.paused:
 			self.paused = False
 			self.start_time = time.time() - self.elapsed_time
-			minutes = round(self.elapsed_time / 60)
-			minutes = str(minutes)
-			seconds = round(self.elapsed_time % 60)
-			seconds = str(seconds) if seconds > 9 else "0" + str(seconds)
-			print("Resumed at " + minutes + ":" + seconds)
-			notify2.Notification("Pomodoro Timer", "Resumed at " + str(minutes) + ":" + str(seconds)).show()
+			minutes = str(int(self.elapsed_time / 60))
+			minutes = "0" * (2 - len(minutes)) + minutes
+			seconds = str(int(self.elapsed_time % 60))
+			seconds = "0" * (2 - len(seconds)) + seconds
+			percentage = int(100 * self.elapsed_time / self.time_limit)
+			print("\033[A" + self.output_base + " " * (3 - len(str(percentage))) + str(percentage) + "% [" + "=" * percentage + ">" + " " * (100 - percentage) + "] " + minutes + ":" + seconds)
+			notify2.Notification("Pomodoro Timer", "Resumed at " + minutes + ":" + seconds).show()
 		else:
 			self.paused = True
 			self.elapsed_time = time.time() - self.start_time
-			minutes = round(self.elapsed_time / 60)
-			minutes = str(minutes)
-			seconds = round(self.elapsed_time % 60)
-			seconds = str(seconds) if seconds > 9 else "0" + str(seconds)
-			print("Paused at " + minutes + ":" + seconds)
-			notify2.Notification("Pomodoro Timer", "Paused at " + str(minutes) + ":" + str(seconds)).show()
+			minutes = str(int(self.elapsed_time / 60))
+			minutes = "0" * (2 - len(minutes)) + minutes
+			seconds = str(int(self.elapsed_time % 60))
+			seconds = "0" * (2 - len(seconds)) + seconds
+			percentage = int(100 * self.elapsed_time / self.time_limit)
+			print("\033[A" + self.task + " (Paused) " + " " * (3 - len(str(percentage))) + str(percentage) + "% [" + "=" * percentage + ">" + " " * (100 - percentage) + "] " + minutes + ":" + seconds)
+			notify2.Notification("Pomodoro Timer", "Paused at " + minutes + ":" + seconds).show()
 
 	def stop(self):
 		keyboard.unhook_all()
@@ -93,6 +105,7 @@ pomodoro_length = 8
 short_break_length = 3
 long_break_length = 5
 task = "Pomodoro"
+timer_update_interval = 1
 
 arg = 1
 while arg < len(sys.argv):
@@ -117,6 +130,9 @@ while arg < len(sys.argv):
 	elif sys.argv[arg] == "-t" or sys.argv[arg] == "--task":
 		arg += 1
 		task = sys.argv[arg]
+	elif sys.argv[arg] == "-u" or sys.argv[arg] == "--update":
+		arg += 1
+		timer_update_interval = int(sys.argv[arg])
 	else:
 		usage = True
 		break
@@ -134,16 +150,14 @@ if developer_info:
 	exit(0)
 
 for i in range(pomodoros):
-	print(task + " for " + str(pomodoro_length))
+	spacing = max(len(task), len("Short break"), len("Long break"))
 	notify2.Notification("Pomodoro Timer", task + " for " + str(pomodoro_length) + " minutes").show()
-	Timer(pomodoro_length * 60).start()
+	Timer(pomodoro_length * 60, task + " " * (spacing - len(task))).start(timer_update_interval)
 	if i == pomodoros - 1:
-		print("Long break for " + str(long_break_length) + " minutes")
 		notify2.Notification("Pomodoro Timer", "Long break for " + str(long_break_length) + " minutes").show()
-		Timer(long_break_length * 60).start()
+		Timer(long_break_length * 60, "Long break" + " " * (spacing - len("Long break"))).start(timer_update_interval)
 		break
-	print("Short break for " + str(short_break_length))
 	notify2.Notification("Pomodoro Timer", "Short break for " + str(short_break_length) + " minutes").show()
-	Timer(short_break_length * 60).start()
+	Timer(short_break_length * 60, "Short break" + " " * (spacing - len("Short break"))).start(timer_update_interval)
 print(task + " finished!")
 notify2.Notification("Pomodoro Timer", task + " finished!").show()
