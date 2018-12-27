@@ -178,15 +178,30 @@ if developer_info:
 for i in range(pomodoros):
 	spacing = max(len(task), len("Short break"), len("Long break"))
 	notify2.Notification("Pomodoro Timer", task + " for " + str(pomodoro_length) + " minutes").show()
-	os.system("wmctrl -s 0")
+	if workspace:
+		os.system("wmctrl -s 0")
+	if screensaver:
+		os.system("gnome-screensaver-command -a")
+		time.sleep(1)
+		os.system("gnome-screensaver-command -d")
 	Timer(pomodoro_length * 60, task + " " * (spacing - len(task))).start(timer_update_interval)
 	if i == pomodoros - 1:
 		notify2.Notification("Pomodoro Timer", "Long break for " + str(long_break_length) + " minutes").show()
-		os.system("wmctrl -s 1")
+		if workspace:
+			os.system("wmctrl -s 1")
+		if screensaver:
+			os.system("gnome-screensaver-command -a")
+			time.sleep(1)
+			os.system("gnome-screensaver-command -d")
 		Timer(long_break_length * 60, "Long break" + " " * (spacing - len("Long break"))).start(timer_update_interval)
 		break
 	notify2.Notification("Pomodoro Timer", "Short break for " + str(short_break_length) + " minutes").show()
-	os.system("wmctrl -s 1")
+	if workspace:
+		os.system("wmctrl -s 1")
+	if screensaver:
+		os.system("gnome-screensaver-command -a")
+		time.sleep(1)
+		os.system("gnome-screensaver-command -d")
 	Timer(short_break_length * 60, "Short break" + " " * (spacing - len("Short break"))).start(timer_update_interval)
 print(task + " finished!")
 notify2.Notification("Pomodoro Timer", task + " finished!").show()
