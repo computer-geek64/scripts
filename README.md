@@ -12,9 +12,9 @@ Install a Linux or Unix operating system (preferrably [Kali Linux](https://www.k
 sudo -i
 apt-get update --fix-missing -y
 apt-get dist-upgrade -y
-apt-get install gnome-screensaver -y
+apt-get install gnome-screensaver wmctrl -y
 apt-get autoremove -y
-apt-get autoclean -y
+apt-get clean -y
 ```
 2. Install Python 3.6 (if not already installed)
 ```bash
