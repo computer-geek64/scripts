@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# pomodoro.py v2.3
+# pomodoro.py v2.4
 # Ashish D'Souza
 # December 27th, 2018
 
@@ -29,6 +29,7 @@ developer = " ".join(lines[2].split(" ")[-2:]).strip()
 developer_info_url = "https://computer-geek64.github.io/info"
 rights = "All rights reserved."
 notify2.init("Pomodoro")
+exit_all = False
 
 def print_banner():
 	print(name + " v" + str(version))
@@ -58,9 +59,12 @@ class Timer:
 
 	def start(self, update_interval):
 		keyboard.add_hotkey("ctrl+alt+space", self.pause)
+		keyboard.add_hotkey("ctrl+alt+x", self.stop, args=(True,))
 		self.start_time = time.time()
 		print()
 		while self.elapsed_time < self.time_limit:
+			if exit_all:
+				exit(0)
 			if not self.paused:
 				self.elapsed_time = time.time() - self.start_time
 				minutes = str(int(self.elapsed_time / 60))
@@ -94,8 +98,12 @@ class Timer:
 			print("\033[A" + self.task + " (Paused) " + " " * (3 - len(str(percentage))) + str(percentage) + "% [" + "=" * percentage + ">" + " " * (100 - percentage) + "] " + minutes + ":" + seconds)
 			notify2.Notification("Pomodoro Timer", "Paused at " + minutes + ":" + seconds).show()
 
-	def stop(self):
+	def stop(self, stop=False):
 		keyboard.unhook_all()
+		if stop:
+			global exit_all
+			exit_all = True
+			exit(0)
 
 banner = True
 usage = False
