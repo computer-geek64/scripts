@@ -1,12 +1,13 @@
 #!/usr/bin/python3
-# dotnet.py v2.1
+# dotnet.py v2.2
 # Ashish D'Souza
-# December 26th, 2018
+# December 27th, 2018
 
 try:
 	import sys
 	import os
 	import requests
+	from datetime import datetime
 except ImportError:
 	print("[-] Installing dependencies...")
 	if os.system("pip install --upgrade requests datetime; pip3 install --upgrade requests datetime") == 0:
@@ -45,6 +46,7 @@ if len(sys.argv) < 4:
 banner = True
 usage = False
 developer_info = False
+image_file = "image.png"
 
 arg = 1
 while arg < len(sys.argv):
@@ -54,10 +56,11 @@ while arg < len(sys.argv):
 		banner = False
 	elif sys.argv[arg] == "-d" or sys.argv[arg] == "--developer":
 		developer_info = True
+	elif arg == len(sys.argv) - 1:
+		image_file = sys.argv[arg] if sys.argv[arg][-4:] == ".png" else sys.argv[arg] + ".png"
 	else:
 		try:
 			int(sys.argv[arg])
-			continue
 		except ValueError:
 			usage = True
 	arg += 1
@@ -117,5 +120,5 @@ output += "}\n"
 with open(os.path.join(os.getcwd(), "image.txt"), "w") as file:
 	file.write(output)
 	file.close()
-os.system("cat " + os.path.join(os.getcwd(), "image.txt") +  " | dot -T png > " + os.getcwd() + "/" + sys.argv[-1])
+os.system("cat " + os.path.join(os.getcwd(), "image.txt") +  " | dot -T png > " + os.getcwd() + "/" + image_file)
 os.system("rm " + os.path.join(os.getcwd(), "image.txt"))
