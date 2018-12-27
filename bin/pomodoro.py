@@ -41,10 +41,10 @@ def print_usage():
 	print("-h\t\t--help\t\t\tShow this help screen")
 	print("-b\t\t--no-banner\t\tSuppress banner")
 	print("-d\t\t--developer\t\tDisplay information about developer")
-	print("-P\t\t--pomodoros\t\tSpecify pomodoro count")
-	print("-p\t\t--pomodoro-length\tSpecify pomodoro length (minutes)")
-	print("-s\t\t--short-break\t\tSpecify short break length (minutes)")
-	print("-l\t\t--long-break\t\tSpecify long break length (minutes)")
+	print("-P\t\t--pomodoros\t\tSpecify pomodoro count (default is 4)")
+	print("-p\t\t--pomodoro-length\tSpecify pomodoro length (minutes, default is 12)")
+	print("-s\t\t--short-break\t\tSpecify short break length (minutes, default is 3)")
+	print("-l\t\t--long-break\t\tSpecify long break length (minutes, default is 8)")
 	print("-t\t\t--task\t\t\tSpecify task to complete (default is \"pomodoro\")")
 	print("-u\t\t--update\t\tSpecify update interval (seconds, default is 1)")
 
@@ -108,10 +108,10 @@ class Timer:
 banner = True
 usage = False
 developer_info = False
-pomodoros = 3
-pomodoro_length = 8
-short_break_length = 3
-long_break_length = 5
+pomodoros = 4
+pomodoro_length = 12 # 25 for longer session
+short_break_length = 3 # 5 for longer session
+long_break_length = 8 # 15 for longer session
 task = "Pomodoro"
 timer_update_interval = 1
 
