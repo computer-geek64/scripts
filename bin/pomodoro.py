@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# pomodoro.py v2.4
+# pomodoro.py v2.5
 # Ashish D'Souza
 # December 27th, 2018
 
@@ -47,6 +47,8 @@ def print_usage():
 	print("-l\t\t--long-break\t\tSpecify long break length (minutes, default is 8)")
 	print("-t\t\t--task\t\t\tSpecify task to complete (default is \"pomodoro\")")
 	print("-u\t\t--update\t\tSpecify update interval (seconds, default is 1)")
+	print("-w\t\t--workspace\t\tSwitch workspaces")
+	print("-S\t\t--screensaver\t\tEmploy screensaver")
 
 class Timer:
 	def __init__(self, limit, task_name):
@@ -60,6 +62,7 @@ class Timer:
 	def start(self, update_interval):
 		keyboard.add_hotkey("ctrl+alt+space", self.pause)
 		keyboard.add_hotkey("ctrl+alt+x", self.stop, args=(True,))
+		keyboard.add_hotkey("ctrl+alt+s", self.status)
 		self.start_time = time.time()
 		print()
 		while self.elapsed_time < self.time_limit:
@@ -98,6 +101,15 @@ class Timer:
 			print("\033[A" + self.task + " (Paused) " + " " * (3 - len(str(percentage))) + str(percentage) + "% [" + "=" * percentage + ">" + " " * (100 - percentage) + "] " + minutes + ":" + seconds)
 			notify2.Notification("Pomodoro Timer", "Paused at " + minutes + ":" + seconds).show()
 
+	def status(self):
+		self.elapsed_time = time.time() - self.start_time
+		minutes = str(int(self.elapsed_time / 60))
+		minutes = "0" * (2 - len(minutes)) + minutes
+		seconds = str(int(self.elapsed_time % 60))
+		seconds = "0" * (2 - len(seconds)) + seconds
+		percentage = int(100 * self.elapsed_time / self.time_limit)
+		notify2.Notification("Pomodoro Timer", " ".join([x for x in self.task.split(" ") if x]) + " at " + minutes + ":" + seconds + " (" + str(percentage) + "%)").show()
+
 	def stop(self, stop=False):
 		keyboard.unhook_all()
 		if stop:
@@ -114,6 +126,8 @@ short_break_length = 3 # 5 for longer session
 long_break_length = 8 # 15 for longer session
 task = "Pomodoro"
 timer_update_interval = 1
+workspace = False
+screensaver = False
 
 arg = 1
 while arg < len(sys.argv):
@@ -141,6 +155,10 @@ while arg < len(sys.argv):
 	elif sys.argv[arg] == "-u" or sys.argv[arg] == "--update":
 		arg += 1
 		timer_update_interval = int(sys.argv[arg])
+	elif sys.argv[arg] == "-w" or sys.argv[arg] == "--workspace":
+		workspace = True
+	elif sys.argv[arg] == "-S" or sys.argv[arg] == "--screensaver":
+		screensaver = True
 	else:
 		usage = True
 		break
@@ -160,12 +178,15 @@ if developer_info:
 for i in range(pomodoros):
 	spacing = max(len(task), len("Short break"), len("Long break"))
 	notify2.Notification("Pomodoro Timer", task + " for " + str(pomodoro_length) + " minutes").show()
+	os.system("wmctrl -s 0")
 	Timer(pomodoro_length * 60, task + " " * (spacing - len(task))).start(timer_update_interval)
 	if i == pomodoros - 1:
 		notify2.Notification("Pomodoro Timer", "Long break for " + str(long_break_length) + " minutes").show()
+		os.system("wmctrl -s 1")
 		Timer(long_break_length * 60, "Long break" + " " * (spacing - len("Long break"))).start(timer_update_interval)
 		break
 	notify2.Notification("Pomodoro Timer", "Short break for " + str(short_break_length) + " minutes").show()
+	os.system("wmctrl -s 1")
 	Timer(short_break_length * 60, "Short break" + " " * (spacing - len("Short break"))).start(timer_update_interval)
 print(task + " finished!")
 notify2.Notification("Pomodoro Timer", task + " finished!").show()
