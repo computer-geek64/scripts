@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# git-backup v1.3
+# git-backup.py v1.3
 # Ashish D'Souza
 # December 27th, 2018
 
