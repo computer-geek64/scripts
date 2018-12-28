@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# git-backup v1.2
+# git-backup v1.3
 # Ashish D'Souza
 # December 27th, 2018
 
@@ -29,7 +29,7 @@ rights = "All rights reserved."
 
 def print_banner():
 	print(name + " v" + str(version))
-	print("Copyright " + developer + str(datetime.now().year) + " " + developer + ". " + rights + "\n")
+	print("Copyright " + str(datetime.now().year) + " " + developer + ". " + rights + "\n")
 
 def print_usage():
 	print("Usage: " + name + " [options]\n")
