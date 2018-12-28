@@ -38,11 +38,13 @@ def print_usage():
 	print("-b\t\t--no-banner\t\tSuppress banner")
 	print("-d\t\t--developer\t\tDisplay information about developer")
 	print("-s\t\t--setup\t\t\tRun one-time setup to install \"rig\" package")
+	print("-g [gender]\t--gender [gender]\tSpecify gender of fake profile to generate (m/f, male/female)")
 
 banner = True
 usage = False
 developer_info = False
 setup = False
+gender = ""
 
 arg = 1
 while arg < len(sys.argv):
@@ -54,9 +56,16 @@ while arg < len(sys.argv):
 		banner = False
 	elif sys.argv[arg] == "-s" or sys.argv[arg] == "--setup":
 		setup = True
+	elif sys.argv[arg] == "-g" or sys.argv[arg] == "--gender":
+		arg += 1
+		if sys.argv[arg].lower() == "m" or sys.argv[arg].lower() == "male":
+			gender = "m"
+		elif sys.argv[arg].lower() == "f" or sys.argv[arg].lower() == "female":
+			gender = "f"
+		else:
+			usage = True
 	else:
 		usage = True
-		break
 	arg += 1
 
 if banner:
@@ -77,7 +86,10 @@ if developer_info:
 	print(requests.get(developer_info_url).text)
 	exit(0)
 
-rig = os.popen("rig").read().split("\n")
+if len(gender) > 0:
+	rig = os.popen("rig -" + gender).read().split("\n")
+else:
+	rig = os.popen("rig").read().split("\n")
 rig[3] = rig[3].split(" ")[0] + " " + str(int(random() * 900) + 100) + "-" + str(int(random() * 9000) + 1000)
 rig = [x.replace("  ", " ") for x in rig if x]
 print("\n".join(rig))
