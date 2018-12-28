@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# fid.py v1.1
+# fid.py v1.3
 # Ashish D'Souza
 # December 28th, 2018
 
@@ -91,12 +91,29 @@ uinames = json.loads(requests.get("https://uinames.com/api/?ext&region=united st
 fake["gender"] = randomuser["results"][0]["gender"].capitalize()
 fake["login"] = randomuser["results"][0]["login"]
 fake["username"] = randomuser["results"][0]["login"]["username"]
-fake["password"] = randomuser["results"][0]["login"]["password"]
+# fake["password"] = randomuser["results"][0]["login"]["password"]
+fake["password"] = uinames["password"]
 fake["street"] = " ".join([x.capitalize() for x in randomuser["results"][0]["location"]["street"].split(" ")])
 fake["ssn"] = randomuser["results"][0]["id"]["value"]
 fake["name"] = uinames["title"].capitalize() + ". " + uinames["name"] + " " + uinames["surname"]
 fake["email"] = uinames["email"].split("@")[0] + "@gmail.com"
-fake["credit_card"] = uinames["credit_card"]
+fake["credit_card_expiration"] = uinames["credit_card"]["expiration"]
+fake["credit_card_number"] = uinames["credit_card"]["number"]
+fake["credit_card_pin"] = str(uinames["credit_card"]["pin"])
+fake["credit_card_security"] = str(uinames["credit_card"]["security"])
+if len(fake["credit_card_number"].replace("-", "")) == 15:
+	fake["credit_card_company"] = "American Express"
+else:
+	if fake["credit_card_number"][0] == "3":
+		fake["credit_card_company"] = "American Express"
+	elif fake["credit_card_number"][0] == "4":
+		fake["credit_card_comapny"] = "Visa"
+	elif fake["credit_card_number"][0] == "5":
+		fake["credit_card_company"] = "MasterCard"
+	elif fake["credit_card_number"][0] == "6":
+		fake["credit_card_company"] = "Discover"
+	else:
+		fake["credit_card_company"] = "Unknown"
 
 locationiq = json.loads(requests.get("https://us1.locationiq.com/v1/search.php?key=a6485e7c311089&format=json&q=" + fake["street"] + ", us").text)
 
@@ -108,18 +125,21 @@ fake["state"] = locationiq[0]["display_name"].split(", ")[-3]
 fake["zip_code"] = locationiq[0]["display_name"].split(", ")[-2]
 fake["country"] = locationiq[0]["display_name"].split(", ")[-1]
 
-print("Physical identity:")
-print(fake["name"] + ", " + str(fake["age"]))
-print(fake["street"])
-print(fake["city"] + ", " + fake["state"] + " " + fake["zip_code"] + ", " + fake["country"])
-# print(fake["city"] + ", " + fake["county"] + ", " + fake["state"] + " " + fake["zip_code"] + ", " + fake["country"])
-print("Latitude: " + fake["latitude"])
-print("Longitude: " + fake["longitude"])
-print("Date of Birth: " + fake["birthday"].strftime("%B %-d, %Y"))
-
-print("\nDigital identity:")
-print(fake["email"])
-print("Username: " + fake["username"])
-print("Password: " + fake["password"])
-print("Social Security Number: " + fake["ssn"])
-print("Credit Card: " + str(fake["credit_card"]))
+print("Name:\t\t\t\t" + fake["name"])
+print("Age:\t\t\t\t" + str(fake["age"]))
+print("Address:\t\t\t" + fake["street"])
+print("\t\t\t\t" + fake["city"] + ", " + fake["state"] + " " + fake["zip_code"] + ", " + fake["country"])
+print("County:\t\t\t\t" + fake["county"])
+# print("\t\t" + fake["city"] + ", " + fake["county"] + ", " + fake["state"] + " " + fake["zip_code"] + ", " + fake["country"])
+print("Location:\t\t\t" + fake["latitude"] + ", " + fake["longitude"])
+print("Date of Birth:\t\t\t" + fake["birthday"].strftime("%B %-d, %Y"))
+print("Phone Number:\t\t\t(xxx) " + str(int(random() * 900) + 100) + "-" + str(int(random() * 9000) + 1000))
+print("Email:\t\t\t\t" + fake["email"])
+print("Username:\t\t\t" + fake["username"])
+print("Password:\t\t\t" + fake["password"])
+print("Social Security Number:\t\t" + fake["ssn"])
+print("Credit Card Company:\t\t" + fake["credit_card_company"])
+print("Credit Card Number:\t\t" + fake["credit_card_number"])
+print("Credit Card Expiration:\t\t" + fake["credit_card_expiration"])
+print("Credit Card Pin:\t\t" + fake["credit_card_pin"])
+print("Credit Card Security Code:\t" + fake["credit_card_security"])
