@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # update.py 2.4
 # Ashish D'Souza
-# December 26th, 2018
+# December 28th, 2018
 
 try:
 	import os
@@ -18,11 +18,8 @@ except ImportError:
 		exit(0)
 
 name = os.path.split(sys.argv[0])[-1]
-with open(sys.argv[0], "r") as file:
-	lines = file.readlines()
-	file.close()
-version = float(lines[1].split(" ")[-1])
-developer = " ".join(lines[2].split(" ")[-2:]).strip()
+version = 2.4
+developer = "Ashish D'Souza"
 developer_info_url = "https://computer-geek64.github.io/info"
 rights = "All rights reserved."
 
