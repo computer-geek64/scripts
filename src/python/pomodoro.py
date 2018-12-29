@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # pomodoro.py v2.5
 # Ashish D'Souza
-# December 27th, 2018
+# December 29th, 2018
 
 try:
 	import os
@@ -15,17 +15,13 @@ except ImportError:
 	print("[-] Installing dependencies...")
 	if os.system("pip install --upgrade requests datetime keyboard notify2; pip3 install --upgrade requests datetime keyboard notify2") == 0:
 		print("[+] Dependencies successfully installed.")
-		exit(0)
 	else:
 		print("[!] Dependency installation failed. Script restart required.")
-		exit(0)
+	sys.exit(0)
 
 name = os.path.split(sys.argv[0])[-1]
-with open(sys.argv[0], "r") as file:
-	lines = file.readlines()
-	file.close()
-version = float(lines[1].split(" ")[-1][1:])
-developer = " ".join(lines[2].split(" ")[-2:]).strip()
+version = 2.5
+developer = "Ashish D'Souza"
 developer_info_url = "https://computer-geek64.github.io/info"
 rights = "All rights reserved."
 notify2.init("Pomodoro")
@@ -67,7 +63,7 @@ class Timer:
 		print()
 		while self.elapsed_time < self.time_limit:
 			if exit_all:
-				exit(0)
+				sys.exit(0)
 			if not self.paused:
 				self.elapsed_time = time.time() - self.start_time
 				minutes = str(int(self.elapsed_time / 60))
@@ -115,7 +111,7 @@ class Timer:
 		if stop:
 			global exit_all
 			exit_all = True
-			exit(0)
+			sys.exit(0)
 
 banner = True
 usage = False
@@ -161,7 +157,6 @@ while arg < len(sys.argv):
 		screensaver = True
 	else:
 		usage = True
-		break
 	arg += 1
 
 if banner:
@@ -169,11 +164,11 @@ if banner:
 
 if usage:
 	print_usage()
-	exit(0)
+	sys.exit(0)
 
 if developer_info:
 	print(requests.get(developer_info_url).text)
-	exit(0)
+	sys.exit(0)
 
 for i in range(pomodoros):
 	spacing = max(len(task), len("Short break"), len("Long break"))
@@ -205,3 +200,4 @@ for i in range(pomodoros):
 	Timer(short_break_length * 60, "Short break" + " " * (spacing - len("Short break"))).start(timer_update_interval)
 print(task + " finished!")
 notify2.Notification("Pomodoro Timer", task + " finished!").show()
+sys.exit(0)

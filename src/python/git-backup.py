@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-# git-backup.py v1.3
+# git-backup.py v1.4
 # Ashish D'Souza
-# December 27th, 2018
+# December 29th, 2018
 
 try:
 	import os
@@ -16,14 +16,11 @@ except ImportError:
 		print("[+] Dependencies successfully installed.")
 	else:
 		print("[!] Dependency installation failed. Script restart required.")
-	exit(0)
+	sys.exit(0)
 
 name = os.path.split(sys.argv[0])[-1]
-with open(sys.argv[0], "r") as file:
-	lines = file.readlines()
-	file.close()
-version = float(lines[1].split(" ")[-1][1:])
-developer = " ".join(lines[2].split(" ")[-2:]).strip()
+version = 1.4
+developer = "Ashish D'Souza"
 developer_info_url = "https://computer-geek64.github.io/info"
 rights = "All rights reserved."
 
@@ -79,18 +76,18 @@ if banner:
 
 if usage:
 	print_usage()
-	exit(0)
+	sys.exit(0)
 
 if developer_info:
 	print(requests.get(developer_info_url).text)
-	exit(0)
+	sys.exit(0)
 
 if confirm:
 	if input("Are you sure you want to delete everything in \"" + os.getcwd() + "\"? Y/N >> ").lower() == "y":
 		print("[+] Proceed.")
 	else:
 		print("[!] Abort.")
-		exit(0)
+		sys.exit(0)
 # Clean directory
 os.system("rm -rf *")
 
