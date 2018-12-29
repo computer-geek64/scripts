@@ -12,10 +12,9 @@ except ImportError:
 	print("[-] Installing dependencies...")
 	if os.system("pip install --upgrade requests datetime; pip3 install --upgrade requests datetime") == 0:
 		print("[+] Dependencies successfully installed.")
-		exit(0)
 	else:
 		print("[!] Dependency installation failed. Script restart required.")
-		exit(0)
+	sys.exit(0)
 
 name = os.path.split(sys.argv[0])[-1]
 version = 2.4
@@ -60,11 +59,11 @@ if banner:
 
 if usage:
 	print_usage()
-	exit(0)
+	sys.exit(0)
 
 if developer_info:
 	print(requests.get(developer_info_url).text)
-	exit(0)
+	sys.exit(0)
 
 update_args = "-y"
 dist_upgrade_args = "-y"

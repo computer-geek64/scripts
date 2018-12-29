@@ -17,7 +17,7 @@ except ImportError:
 	else:
 		print("[!] Dependency installation failed.")
 	print("Script restart required.")
-	exit(0)
+	sys.exit(0)
 
 name = os.path.split(sys.argv[0])[-1]
 version = 1.3
@@ -76,11 +76,11 @@ if banner:
 
 if usage:
 	print_usage()
-	exit(0)
+	sys.exit(0)
 
 if developer_info:
 	print(requests.get(developer_info_url).text)
-	exit(0)
+	sys.exit(0)
 
 fake = {"age": age, "birthday": datetime(datetime.now().year - age, int(random() * datetime.now().month) + 1, int(random() * datetime.now().day) + 1)}
 randomuser = json.loads(requests.get("https://randomuser.me/api/?noinfo&nat=us" + gender).text)
