@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-# update.py 2.4
+# update.py 2.5
 # Ashish D'Souza
-# December 28th, 2018
+# December 29th, 2018
 
 try:
 	import os
@@ -17,7 +17,7 @@ except ImportError:
 	sys.exit(0)
 
 name = os.path.split(sys.argv[0])[-1]
-version = 2.4
+version = 2.5
 developer = "Ashish D'Souza"
 developer_info_url = "https://computer-geek64.github.io/info"
 rights = "All rights reserved."
@@ -33,13 +33,17 @@ def print_usage():
 	print("-b\t\t--no-banner\t\tSuppress banner")
 	print("-d\t\t--developer\t\tDisplay information about developer")
 	print("-ua\t\t--update-args\t\tSpecify \"apt-get update\" arguments with a comma-separated list")
-	print("-dua\t\t--dist-upgrade-args\tSpecify \"apt-get dist-upgrade\" arguments with a comma-separated list")
-	print("-ara\t\t--autoremove-args\tSpecify \"apt-get autoremove\" arguments with a comma-separated list")
+	print("-da\t\t--dist-upgrade-args\tSpecify \"apt-get dist-upgrade\" arguments with a comma-separated list")
+	print("-aa\t\t--autoremove-args\tSpecify \"apt-get autoremove\" arguments with a comma-separated list")
 	print("-ca\t\t--clean-args\t\tSpecify \"apt-get clean\" arguments with a comma-separated list")
 
 banner = True
 usage = False
 developer_info = False
+update_command = "apt-get update -y"
+dist_upgrade_command = "apt-get dist-upgrade -y"
+autoremove_command = "apt-get autoremove -y"
+clean_command = "apt-get clean -y"
 
 arg = 1
 while arg < len(sys.argv):
@@ -49,6 +53,18 @@ while arg < len(sys.argv):
 		developer_info = True
 	elif sys.argv[arg] == "-b" or sys.argv[arg] == "--no-banner":
 		banner = False
+	elif sys.argv[arg] == "-ua" or sys.argv[arg] == "--update-args":
+		arg += 1
+		update_command += " " + " ".join(sys.argv[arg].split(","))
+	elif sys.argv[arg] == "-da" or sys.argv[arg] == "--dist-upgrade-args":
+		arg += 1
+		dist_upgrade_command += " " + " ".join(sys.argv[arg].split(","))
+	elif sys.argv[arg] == "-aa" or sys.argv[arg] == "--autoremove-args":
+		arg += 1
+		autoremove_command += " " + " ".join(sys.argv[arg].split(","))
+	elif sys.argv[arg] == "-ca" or sys.argv[arg] == "--clean-args":
+		arg += 1
+		clean_command += " " + " ".join(sys.argv[arg].split(","))
 	else:
 		usage = True
 		break
@@ -65,37 +81,7 @@ if developer_info:
 	print(requests.get(developer_info_url).text)
 	sys.exit(0)
 
-update_args = "-y"
-dist_upgrade_args = "-y"
-autoremove_args = "-y"
-clean_args = "-y"
-
-if "--update-args" in sys.argv:
-	update_args += " " + " ".join(sys.argv[sys.argv.index("--update-args") + 1].split(","))
-elif "-ua" in sys.argv:
-	update_args += " " + " ".join(sys.argv[sys.argv.index("-ua") + 1].split(","))
-
-if "--dist-upgrade-args" in sys.argv:
-	dist_upgrade_args += " " + " ".join(sys.argv[sys.argv.index("--dist-upgrade-args") + 1].split(","))
-elif "-dua" in sys.argv:
-	dist_upgrade_args += " " + " ".join(sys.argv[sys.argv.index("-dua") + 1].split(","))
-
-if "--autoremove-args" in sys.argv:
-	autoremove_args += " " + " ".join(sys.argv[sys.argv.index("--autoremove-args") + 1].split(","))
-elif "-ara" in sys.argv:
-	autoremove_args += " " + " ".join(sys.argv[sys.argv.index("-ara") + 1].split(","))
-
-if "--clean-args" in sys.argv:
-	clean_args += " " + " ".join(sys.argv[sys.argv.index("--clean-args") + 1].split(","))
-elif "-ca" in sys.argv:
-	clean_args += " " + " ".join(sys.argv[sys.argv.index("-ca") + 1].split(","))
-
-update_command = "apt-get update"
-dist_upgrade_command = "apt-get dist-upgrade"
-autoremove_command = "apt-get autoremove"
-clean_command = "apt-get clean"
-
-os.system(update_command + " " + update_args)
-os.system(dist_upgrade_command + " " + dist_upgrade_args)
-os.system(autoremove_command + " " + autoremove_args)
-os.system(clean_command + " " + clean_args)
+os.system(update_command)
+os.system(dist_upgrade_command)
+os.system(autoremove_command)
+os.system(clean_command)
