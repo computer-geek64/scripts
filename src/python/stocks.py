@@ -95,15 +95,45 @@ if quote:
 	print(json.loads(requests.get("https://api.iextrading.com/1.0/stock/" + stock + "/quote").text))
 
 if price:
-	print(json.loads(requests.get("https://api.iextrading.com/1.0/stock/" + stock + "/price").text))
+	print("$" + requests.get("https://api.iextrading.com/1.0/stock/" + stock + "/price").text)
 
 if company:
-	print(json.loads(requests.get("https://api.iextrading.com/1.0/stock/" + stock + "/company").text))
+	company_json = json.loads(requests.get("https://api.iextrading.com/1.0/stock/" + stock + "/company").text)
+	stock = company_json["symbol"]
+	company_name = company_json["companyName"]
+	exchange = company_json["exchange"]
+	industry = company_json["industry"]
+	website = company_json["website"]
+	description = company_json["description"]
+	ceo = company_json["CEO"]
+	issue_type = company_json["issueType"]
+	company_sector = company_json["sector"]
+	tags = ", ".join(company_json["tags"])
+#	print("Company:\t" + company_name + " (" + stock + ")")
+#	print("Exchange:\t" + exchange)
+#	print("Industry:\t" + industry)
+#	print("Website:\t" + website)
+#	print("Description:\t" + description)
+#	print("CEO:\t\t" + ceo)
+#	print("Issue Type:\t" + issue_type)
+#	print("Sector:\t\t" + company_sector)
+#	print("Tags:\t\t" + tags)
+	print(company_name + " (" + stock + ")")
+	print("CEO: " + ceo)
+	print(website)
+	print(exchange)
+	print(company_sector + " Sector, " + industry + " Industry")
+	print(description)
 
 if relevant:
-	print(json.loads(requests.get("https://api.iextrading.com/1.0/stock/" + stock + "/relevant").text))
+	relevant_json = json.loads(requests.get("https://api.iextrading.com/1.0/stock/" + stock + "/relevant").text)
+	print("Relevant: " + ", ".join(relevant_json["symbols"]))
 
 if sector_performance:
-	print(json.loads(requests.get("https://api.iextrading.com/1.0/stock/market/sector-performance").text))
+	sector_performance_json = json.loads(requests.get("https://api.iextrading.com/1.0/stock/market/sector-performance").text)
+	for sector in sector_performance_json:
+		print("Sector:\t\t" + sector["name"])
+		print("Performance:\t" + str(sector["performance"]))
+		print("Updated:\t" + datetime.fromtimestamp(int(sector["lastUpdated"] / 1000)).strftime("%c") + "\n" * int(sector != sector_performance_json[-1]))
 
 sys.exit(0)
