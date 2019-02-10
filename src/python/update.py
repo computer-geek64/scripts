@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-# update.py 2.5
+# update.py 2.7
 # Ashish D'Souza
-# December 29th, 2018
+# February 10th, 2019
 
 try:
 	import os
@@ -17,7 +17,7 @@ except ImportError:
 	sys.exit(0)
 
 name = os.path.split(sys.argv[0])[-1]
-version = 2.5
+version = 2.7
 developer = "Ashish D'Souza"
 developer_info_url = "https://computer-geek64.github.io/info"
 rights = "All rights reserved."
@@ -85,4 +85,4 @@ os.system(update_command)
 os.system(dist_upgrade_command)
 os.system(autoremove_command)
 os.system(clean_command)
-os.system("update-initramfs -u")
+os.system("update-initramfs -u -k all")
