@@ -83,6 +83,6 @@ if developer_info:
 
 os.system(update_command)
 os.system(dist_upgrade_command)
+os.system("update-initramfs -u -k all")
 os.system(autoremove_command)
 os.system(clean_command)
-os.system("update-initramfs -c -k all")
