@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # update.py 2.8
 # Ashish D'Souza
-# February 11th, 2019
+# February 14th, 2019
 
 try:
 	import os
@@ -83,6 +83,6 @@ if developer_info:
 
 os.system(update_command)
 os.system(dist_upgrade_command)
-os.system("update-initramfs -u -k all")
+os.system("/bin/bash -c 'update-initramfs -u -k all'")
 os.system(autoremove_command)
 os.system(clean_command)
