@@ -41,7 +41,7 @@ banner = True
 usage = False
 developer_info = False
 update_command = "apt-get update -y"
-dist_upgrade_command = "apt-get dist-upgrade -y"
+dist_upgrade_command = "/bin/bash -c 'apt-get dist-upgrade -y'"
 autoremove_command = "apt-get autoremove -y"
 clean_command = "apt-get clean -y"
 
@@ -83,6 +83,6 @@ if developer_info:
 
 os.system(update_command)
 os.system(dist_upgrade_command)
-os.system("/bin/bash -c 'update-initramfs -u -k all'")
+os.system("update-initramfs -u -k all")
 os.system(autoremove_command)
 os.system(clean_command)
